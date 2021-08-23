@@ -1,0 +1,42 @@
+name: Deploy node
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  deploy:
+    name: Deploy the code in server
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: '*'
+          target: ${{ secrets.SSH_FOLDER }}
+
+      - name: Run configurations
+        uses: appleboy/ssh-action@master
+        env:
+          SSH_FOLDER: ${{ secrets.SSH_FOLDER }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          envs: SSH_FOLDER
+          script: |
+            rm -rf .git/ .github/
+            cd $SSH_FOLDER
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            export NODE_OPTIONS=--max_old_space_size=4096
+            npm ci
+            pm2 restart appy1 || pm2 start app.js --name appy1

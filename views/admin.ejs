@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin</title>
+        <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css"
+        />
+    </head>
+    <body style="background-color: #e0e0e0">
+        <main class="container bg-white shadow-lg">
+            <ul>
+                <li>Admin page 1</li>
+                <li><a href="/admin/country-video?token=58fafa63-054a-469e-a26d-4551c5ce34e5">Admin page 2</a></li>
+            </ul>
+            <br />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Country Code</th>
+                        <th>Country Name</th>
+                        <th>ISP</th>
+                        <th>ISP logo</th>
+                        <th>phone min</th>
+                        <th>phone max</th>
+                        <th>girl name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (const [index, record] of records.entries()) { %>
+                    <tr>
+                        <td><%= index+1 %></td>
+                        <td><%= record.country_code %></td>
+                        <td><%= record.country_name %></td>
+                        <td><%= record.isp_name %></td>
+                        <td>
+                            <img src="/images/isp_logos/<%= record.isp_logo_name %>" width="25" />
+                        </td>
+                        <td><%= record.phone_max %></td>
+                        <td><%= record.phone_min %></td>
+                        <td><%= record.girl_name%></td>
+                        <td>
+                            <a href="/admin/records/<%= record.id %>/delete">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <form action="/admin/records" method="post" enctype="multipart/form-data">
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Country Code</label>
+                    <div class="col-sm-10">
+                        <input
+                            type="text"
+                            name="country_code"
+                            class="form-control"
+                            required
+                            oninput="this.value = this.value.toUpperCase()"
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Country Name</label>
+                    <div class="col-sm-10">
+                        <input
+                            type="text"
+                            name="country_name"
+                            class="form-control"
+                            required
+                            oninput="this.value = this.value.toUpperCase()"
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">ISP name</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="isp_name" class="form-control" required />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">ISP logo</label>
+                    <div class="col-sm-10">
+                        <input type="file" name="isp_logo" class="form-control" required />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Phone max</label>
+                    <div class="col-sm-10">
+                        <input
+                            type="text"
+                            name="phone_max"
+                            class="form-control"
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Phone min</label>
+                    <div class="col-sm-10">
+                        <input
+                            type="text"
+                            name="phone_min"
+                            class="form-control"
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Girl name</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="girl_name" class="form-control" required />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">heading_1</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="heading_1" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3">Add</button>
+                </div>
+            </form>
+        </main>
+    </body>
+</html>

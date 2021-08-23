@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Call</title>
+        <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css"
+        />
+        <style>
+            #bg-video {
+                position: fixed;
+                width: 100%;
+                z-index: -1;
+            }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.min.js"></script>
+    </head>
+    <body style="background-color: #e0e0e0">
+        <% if (record) { %>
+        <main>
+            <div class="fixed-top pt-4 ps-4">
+                <span><%= record.girl_name %></span>
+                <br />
+                <span class="badge bg-success">LIVE</span>
+            </div>
+
+            <video id="bg-video" autoplay loop muted playsinline>
+                <source src="/videos/<%= record.video_file_name %>" type="video/mp4" />
+            </video>
+
+            <div class="fixed-bottom text-center pb-5">
+                <h5 style="color: #fff"><%= record.heading_1 %></h5>
+                <a
+                    id="call_now"
+                    href="tel:<%= record.phone_number %>"
+                    class="btn btn-danger rounded-pill px-5 py-2 shadow-lg"
+                >
+                    Call me now!
+                </a>
+                <br /><br />
+                <a href="/terms-and-condition.html">Terms & Condition</a> |
+                <a href="/contact.html">contact</a>
+                <br>
+                <span style="font-size: 10px">International charges may apply. Please check with your mobile carrier.</span>
+            </div>
+        </main>
+        <!-- ISP selection modal starts here -->
+        <div id="ispSelectionModal" class="modal" tabindex="-1">
+            <div
+                class="modal-dialog modal-sm modal-dialog-centered"
+                style="max-width: 260px; margin: 0 auto"
+            >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" style="color: var(--bs-danger)">Call me now!</h3>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>How to continue:</h5>
+                        <ol>
+                            <li>Call our number</li>
+                            <li><%= record.heading_1 %></li>
+                        </ol>
+
+                        <div class="text-center">
+                            <a
+                                class="btn btn-danger rounded-pill px-5 py-2 shadow-lg"
+                                href="tel:<%= record.phone_number %>"
+                            >
+                                <img
+                                    src="/images/isp_logos/<%= record.isp_logo_name %>"
+                                    width="30"
+                                />
+                                Start Call
+                            </a>
+                            <br /><br />
+                            <p>or select your operator</p>
+                            <% for (const _ of country_isp[record.country_name]) { %> <% if
+                            (_.isp_name !== record.isp_name) { %>
+                            <a
+                                href="/?country_name=<%= record.country_name %>&isp_name=<%= _.isp_name %>"
+                            >
+                                <img
+                                    src="/images/isp_logos/<%= _.isp_logo_name %>"
+                                    class="px-1"
+                                    width="50"
+                                />
+                            </a>
+                            <% }} %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            const modal = new bootstrap.Modal(document.getElementById('ispSelectionModal'), {});
+            $('#call_now').click(function (e) {
+                modal.show();
+                e.preventDefault();
+            });
+        </script>
+        <!-- ISP selection modal ends here -->
+        <% } else { %>
+        <main>
+            <form action="/" method="GET">
+                <select id="country_selector" class="form-select mb-3" name="country_name" required>
+                    <option value="">Select Country</option>
+                    <% for (const country_name of Object.keys(country_isp)) { %>
+                    <option value="<%= country_name %>"><%= country_name %></option>
+                    <% } %>
+                </select>
+
+                <select id="isp_selector" class="form-select mb-3" name="isp_name" required>
+                    <option value="">Select ISP</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary mb-3">Go</button>
+            </form>
+        </main>
+        <script>
+            const data = <%- JSON.stringify(country_isp)  %>;
+            const country_selector = document.getElementById('country_selector');
+            const isp_selector = document.getElementById('isp_selector');
+
+            country_selector.onchange = function() {
+                isp_selector.length = 1;
+                console.log(data[this.value])
+
+                data[this.value].forEach(({isp_name}) => {
+                    isp_selector.options[isp_selector.options.length] = new Option(isp_name, isp_name);
+                });
+            }
+        </script>
+        <% } %>
+          
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-CZ9D34KW6X"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-CZ9D34KW6X');
+        </script>
+    </body>
+</html>

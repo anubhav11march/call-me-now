@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin | country - video</title>
+        <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css"
+        />
+    </head>
+    <body style="background-color: #e0e0e0">
+        <main class="container bg-white shadow-lg">
+            <ul>
+                <li><a href="/admin?token=58fafa63-054a-469e-a26d-4551c5ce34e5">Admin page 1</a></li>
+                <li>Admin page 2</li>
+            </ul>
+            <br />
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>country code</th>
+                        <th>video link</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (const [index, record] of records.entries()) { %>
+                    <tr>
+                        <td><%= index+1 %></td>
+                        <td><%= record.country_code %></td>
+                        <td>
+                            <a href="/videos/<%= record.video_file_name %>" target="_blank">link</a>
+                        </td>
+                        <td>
+                            <a href="/admin/admin-country-video/<%= record.id %>/delete">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <form action="/admin/country-video" method="post" enctype="multipart/form-data">
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Country Code</label>
+                    <div class="col-sm-10">
+                        <input
+                            type="text"
+                            name="country_code"
+                            class="form-control"
+                            required
+                            oninput="this.value = this.value.toUpperCase()"
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Video</label>
+                    <div class="col-sm-10">
+                        <input type="file" name="video_file" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3">Add</button>
+                </div>
+            </form>
+        </main>
+    </body>
+</html>
