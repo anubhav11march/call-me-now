@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin</title>
+        <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css"
+        />
+    </head>
+    <body style="background-color: #e0e0e0">
+        <main class="container bg-white shadow-lg">
+            <ul>
+                <li><a href="/admin?token=58fafa63-054a-469e-a26d-4551c5ce34e5">Admin page 1</a></li>
+                <li><a href="/admin/country-video?token=58fafa63-054a-469e-a26d-4551c5ce34e5">Admin page 2</a></li>
+                <li>Admin page 3</li>
+            </ul>
+            <br />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sno</th>
+                        <th>Date/Time</th>
+                        <th>IP</th>
+                        <th>Country Name</th>
+                        <th>ISP</th>
+                        <th>Record Found</th>
+                        <th>Number display</th>
+                        <th>Manual Select</th>
+                        <th>Country</th>
+                        <th>ISP</th>
+                        <th>Number display</th>
+                        <th>Button Clicked</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (const [index, analytic] of analytics.entries()) { %>
+                    <tr>
+                        <td><%= index+1 %></td>
+                        <td><%= analytics[index].created_at%></td>
+                        <td><%= analytic.ip%></td>
+                        <td><%= analytic.user_country %></td>
+                        <td><%= analytic.user_isp_name %></td>
+                        <td><%= analytic.found %></td>
+                        <td><%= analytic.phone_number %></td>
+                        <td><%= analytic.select %></td>
+                        <td><%= analytic.select_country %></td>
+                        <td><%= analytic.select_isp %></td>
+                        <td><%= analytic.number_display %></td>
+                        <td><%= analytic.button_clicked %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </main>
+    </body>
+</html>

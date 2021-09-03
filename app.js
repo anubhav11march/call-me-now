@@ -8,9 +8,11 @@ const useragent = require('express-useragent');
 
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
+const db = require('./db');
+const { debugPort } = require('process');
 
 var app = express();
-const PORT = 5000;
+const PORT = 5001;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,6 +44,34 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+setInterval(function () {
+    function compare(a, b) {
+        var x = new Date(a.created_at).getTime();
+        var y = new Date(b.created_at).getTime();
+        if (x > y) {
+            return -1;
+        }
+        if (x < y) {
+            return 1;
+        }
+        return 0;
+    }
+    try {
+        const analytics = db.get('analytics').value();
+        analytics.sort(compare);
+        var len = analytics.length;
+        if (len > 3000) {
+            for (var i = 3000; i < len; i++) {
+                db.get('analytics').remove({ id: analytics[i].id }).write();
+            }
+        } else {
+            console.log('Less than 20');
+        }
+    } catch {
+        console.log('Error');
+    }
+}, 1 * 60 * 60 * 1000);
 
 app.listen(PORT, () => console.log(`running ${PORT}`));
 //module.exports = app;

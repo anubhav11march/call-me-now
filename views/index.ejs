@@ -10,8 +10,8 @@
             href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"
         />
         <link
-            rel="stylesheet"
-            href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css"
         />
         <style>
             #bg-video {
@@ -19,11 +19,13 @@
                 width: 100%;
                 z-index: -1;
             }
-        </style>
+            </style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body style="background-color: #e0e0e0">
+        <h1 id="visitorID" style="display: none;" name="userID"><%=visitorID%></h1>
         <% if (record) { %>
         <main>
             <div class="fixed-top pt-4 ps-4">
@@ -38,6 +40,7 @@
 
             <div class="fixed-bottom text-center pb-5">
                 <h5 style="color: #fff"><%= record.heading_1 %></h5>
+               
                 <a
                     id="call_now"
                     href="tel:<%= record.phone_number %>"
@@ -77,6 +80,8 @@
 
                         <div class="text-center">
                             <a
+                                id="start_button"
+                                name="<%= record.phone_number %>"
                                 class="btn btn-danger rounded-pill px-5 py-2 shadow-lg"
                                 href="tel:<%= record.phone_number %>"
                             >
@@ -91,7 +96,7 @@
                             <% for (const _ of country_isp[record.country_name]) { %> <% if
                             (_.isp_name !== record.isp_name) { %>
                             <a
-                                href="/?country_name=<%= record.country_name %>&isp_name=<%= _.isp_name %>"
+                                href="/call/?country_name=<%= record.country_name %>&isp_name=<%= _.isp_name %>"
                             >
                                 <img
                                     src="/images/isp_logos/<%= _.isp_logo_name %>"
@@ -106,16 +111,28 @@
             </div>
         </div>
         <script>
+            var visitor=$("#visitorID").text();
+            var phone=$("#start_button").attr("href");
+            console.log(visitor,phone)
             const modal = new bootstrap.Modal(document.getElementById('ispSelectionModal'), {});
             $('#call_now').click(function (e) {
                 modal.show();
                 e.preventDefault();
             });
+            $("#start_button").click(function(e){
+                window.open(phone);
+                 fetch(`/call/${visitor}`,{
+                     method:"Get"
+                 }).then((res)=>console.log(res));
+                
+                 e.preventDefault();
+             })
         </script>
         <!-- ISP selection modal ends here -->
         <% } else { %>
         <main>
             <form action="/" method="GET">
+                
                 <select id="country_selector" class="form-select mb-3" name="country_name" required>
                     <option value="">Select Country</option>
                     <% for (const country_name of Object.keys(country_isp)) { %>
@@ -126,12 +143,17 @@
                 <select id="isp_selector" class="form-select mb-3" name="isp_name" required>
                     <option value="">Select ISP</option>
                 </select>
+                <select style="display: none;" id="user_visit_id" class="form-select mb-3" name="userID" required>
+                    <option value='<%=visitorID%>' selected>Default</option>
+                </select>
 
                 <button type="submit" class="btn btn-primary mb-3">Go</button>
             </form>
         </main>
         <script>
-            const data = <%- JSON.stringify(country_isp)  %>;
+            const data = <%-JSON.stringify(country_isp)%>;
+            //console.log("DATA-- > ",data)
+            
             const country_selector = document.getElementById('country_selector');
             const isp_selector = document.getElementById('isp_selector');
 
@@ -142,6 +164,8 @@
                 data[this.value].forEach(({isp_name}) => {
                     isp_selector.options[isp_selector.options.length] = new Option(isp_name, isp_name);
                 });
+
+                console.log(isp_selector)
             }
         </script>
         <% } %>

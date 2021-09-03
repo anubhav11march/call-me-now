@@ -13,12 +13,14 @@
             rel="stylesheet"
             href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css"
         />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
-    <body style="background-color: #e0e0e0">
+    <body style="background-color: #e0e0e0" id="body">
         <main class="container bg-white shadow-lg">
             <ul>
                 <li>Admin page 1</li>
                 <li><a href="/admin/country-video?token=58fafa63-054a-469e-a26d-4551c5ce34e5">Admin page 2</a></li>
+                <li><a href="/admin/analytics?token=58fafa63-054a-469e-a26d-4551c5ce34e5">Admin page 3</a></li>
             </ul>
             <br />
             <table class="table">
@@ -32,12 +34,12 @@
                         <th>phone min</th>
                         <th>phone max</th>
                         <th>girl name</th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% for (const [index, record] of records.entries()) { %>
-                    <tr>
+                    <tr id="row<%= index+1 %>">
                         <td><%= index+1 %></td>
                         <td><%= record.country_code %></td>
                         <td><%= record.country_name %></td>
@@ -52,11 +54,22 @@
                             <a href="/admin/records/<%= record.id %>/delete">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
+                            <div class="ml-3"></div>
+                            
+                                <i class="bi bi-pencil-square" onclick="setRecord('row<%= index+1 %>','<%= record.id %>','<%= record.country_code %>','<%= record.country_name %>','<%= record.isp_name %>','<%= record.phone_max %>','<%= record.phone_min %>','<%= record.girl_name%>','<%= record.heading_1%>','<%= record.isp_logo_name%>')"></i>
+                            
                         </td>
                     </tr>
                     <% } %>
                 </tbody>
-            </table>
+
+
+
+
+                <!-- Button trigger modal -->
+  <!-- Modal -->
+</table>
+           
 
             <form action="/admin/records" method="post" enctype="multipart/form-data">
                 <div class="mb-3 row">
@@ -86,13 +99,13 @@
                 <div class="mb-3 row">
                     <label class="col-sm-2 col-form-label">ISP name</label>
                     <div class="col-sm-10">
-                        <input type="text" name="isp_name" class="form-control" required />
+                        <input type="text" name="isp_name" class="form-control"  required />
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label class="col-sm-2 col-form-label">ISP logo</label>
                     <div class="col-sm-10">
-                        <input type="file" name="isp_logo" class="form-control" required />
+                        <input type="file" name="isp_logo" class="form-control"  required />
                     </div>
                 </div>
                 <div class="mb-3 row">
@@ -100,6 +113,7 @@
                     <div class="col-sm-10">
                         <input
                             type="text"
+        
                             name="phone_max"
                             class="form-control"
                             required
@@ -111,6 +125,7 @@
                     <div class="col-sm-10">
                         <input
                             type="text"
+    
                             name="phone_min"
                             class="form-control"
                             required
@@ -120,19 +135,176 @@
                 <div class="mb-3 row">
                     <label class="col-sm-2 col-form-label">Girl name</label>
                     <div class="col-sm-10">
-                        <input type="text" name="girl_name" class="form-control" required />
+                        <input type="text" name="girl_name" class="form-control"  required />
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label class="col-sm-2 col-form-label">heading_1</label>
                     <div class="col-sm-10">
-                        <input type="text" name="heading_1" class="form-control" required />
+                        <input type="text" name="heading_1" class="form-control"  required />
                     </div>
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3">Add</button>
+                    <button type="submit" class="btn btn-primary mb-3" id="myButton">Add</button>
                 </div>
+               
             </form>
         </main>
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">Modal Methods</h4>
+                </div>
+                <div class="modal-body">
+                <p>The <strong>show</strong> method shows the modal and the <strong>hide</strong> method hides the modal.</p>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+
     </body>
+    <script>
+        var editMode=false;
+        var record={} 
+        function setRecord(rowID,id,country_code,country_name,isp_name,phone_max,phone_min,girl_name,heading_1,filename){
+            //console.log(id,girl_name,country_name,country_code,isp_name,phone_max,phone_min,girl_name,heading_1);
+          
+            
+            $("body").append(`<div id="editform" style="border-radius:10px;padding:10px;position:fixed;left:30vw;top:5vh;background-color:whitesmoke;width:800px;">
+                <h3>EDIT FORM</h3>          
+                <form action="/admin/records/edit" method="post" enctype="multipart/form-data">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Record ID</label>
+                        <div class="col-sm-6">  
+                            <input
+                                type="text"
+                                name="id"
+                                id="id"
+                                class="form-control"
+                                required
+                                readonly
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3 row" style="display:none;">
+                        <label class="col-sm-2 col-form-label">filename</label>
+                        <div class="col-sm-6">
+                            <input
+                                type="text"
+                                name="filename"
+                                id="filename"
+                                class="form-control"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                    <div style="display: flex;justify-content: center;align-items: center;">
+                    <div class="mb-3 row">
+                        <label class="col-sm-4 col-form-label">Country Code</label>
+                        <div class="col-sm-8">
+                            <input
+                                type="text"
+                                name="country_code"
+                                id="country_code"
+                                class="form-control"
+                                required
+                                oninput="this.value = this.value.toUpperCase()"
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-4 col-form-label">Country Name</label>
+                        <div class="col-sm-8">
+                            <input
+                                type="text"
+                                name="country_name"
+                                id="country_name"
+                                class="form-control"
+                                required
+                                oninput="this.value = this.value.toUpperCase()"
+                            />
+                        </div>
+                    </div>
+                </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">ISP name</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="isp_name" class="form-control" id="isp_name" required />
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">ISP logo</label>
+                        <div class="col-sm-10">
+                            <input type="file" name="isp_logo" class="form-control" id="isp_logo"/>
+                        </div>
+                    </div>
+                    <div style="display: flex;justify-content: center;align-items: center;">
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Phone max</label>
+                            <div class="col-sm-6">
+                                <input
+                                    type="text"
+                                    id="phone_max"
+                                    name="phone_max"
+                                    class="form-control"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label">Phone min</label>
+                            <div class="col-sm-6">
+                                <input
+                                    type="text"
+                                    id="phone_min"
+                                    name="phone_min"
+                                    class="form-control"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Girl name</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="girl_name" class="form-control" id="girl_name" required />
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">heading_1</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="heading_1" class="form-control" id="heading_1" required />
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div style="display: flex;align-items: center;justify-content: space-around;">
+                            <button type="submit" class="btn btn-primary mb-3 " s id="myButton">EDIT</button>
+                            <button type="submit" class="btn btn-secondary mb-3 " s id="close">CLOSE</button>
+                        </div>
+                    </div>
+                   
+                </form>
+            </div>`)
+            $("#close").click(function(){
+                $("#editform").remove();
+            })
+
+            $("#country_code").val(country_code);
+            $("#id").val(id);
+            $("#country_name").val(country_name);
+            //  $("#editform").css({
+            //     "border-radius":"10px","padding":"10px","position": "fixed","left":"25vw","top":"5vh","background-color":"whitesmoke","width":"800px"
+            //  })
+            $("#isp_name").val(isp_name);
+            $("#filename").val(filename);
+            $("#girl_name").val(girl_name);
+            $("#phone_max").val(phone_max);
+            $("#phone_min").val(phone_min);
+            $("#heading_1").val(heading_1);
+        }
+    </script>
 </html>

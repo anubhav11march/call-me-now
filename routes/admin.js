@@ -46,14 +46,55 @@ router.post('/records', upload_isp_logo.single('isp_logo'), async (req, res) => 
 
     db.get('records')
         .insert({
-            id: uuid(),
+            id: req.body.id,
             ...req.body,
             isp_logo_name: req.file.filename,
             created_at: new Date(),
         })
         .write();
-
     res.redirect('back');
+});
+
+router.post('/records/edit', upload_isp_logo.single('isp_logo'), async (req, res) => {
+    console.log(1, req.body, req.file);
+
+    var filename = req.body.filename;
+
+    db.get('records').remove({ id: req.body.id }).write();
+    if (req.file) {
+        filename = req.file.filename;
+    }
+    db.get('records')
+        .insert({
+            id: req.body.id,
+            ...req.body,
+            isp_logo_name: filename,
+            created_at: new Date(),
+        })
+        .write();
+    res.redirect('back');
+});
+
+router.get('/analytics/:id/delete', async (req, res) => {
+    db.get('analytics').remove({ id: req.params.id }).write();
+    res.redirect('back');
+});
+
+router.get('/analytics', adminMiddleware, async (req, res) => {
+    function compare(a, b) {
+        var x = new Date(a.created_at).getTime();
+        var y = new Date(b.created_at).getTime();
+        if (x > y) {
+            return -1;
+        }
+        if (x < y) {
+            return 1;
+        }
+        return 0;
+    }
+    const analytics = db.get('analytics').value();
+    await analytics.sort(compare);
+    res.render('admin3', { analytics });
 });
 
 router.get('/country-video', adminMiddleware, async (req, res) => {
