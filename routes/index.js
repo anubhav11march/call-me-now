@@ -68,6 +68,7 @@ router.get('/', async (req, res) => {
             console.log({ ip: req.clientIp });
             const ipinfo = await IpInfo(req.clientIp);
             console.log({ isp: ipinfo.isp });
+            console.log(ipinfo.countryCode);
             const x = db
                 .get('records')
                 .filter({ country_code: ipinfo.countryCode })

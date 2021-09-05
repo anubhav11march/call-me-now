@@ -6,6 +6,6 @@ const adapter = new FileSync('db.json');
 const db = low(adapter);
 
 db._.mixin(lodashId);
-db.defaults({ admins: [], records: [], country_video: [], isp_logo: [] }).write();
+db.defaults({ admins: [], records: [], analytics: [], country_video: [], isp_logo: [] }).write();
 
 module.exports = db;
