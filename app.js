@@ -12,7 +12,7 @@ const db = require('./db');
 const { debugPort } = require('process');
 
 var app = express();
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
