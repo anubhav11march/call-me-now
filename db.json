@@ -76,52 +76,16 @@
   ],
   "analytics": [
     {
-      "id": "62dea458-f723-46fd-ae89-cca0f458193b",
-      "ip": "::1",
-      "found": false,
-      "phone_number": "",
-      "select": "No",
-      "select_country": "",
-      "select_isp": "",
-      "number_display": "",
-      "button_clicked": "No",
-      "created_at": "Mon Sep 06 2021 0:5"
-    },
-    {
-      "id": "0d8b910c-6337-4933-8d58-9cbf0e334507",
-      "ip": "::1",
-      "found": false,
-      "phone_number": "",
-      "select": "No",
-      "select_country": "",
-      "select_isp": "",
-      "number_display": "",
-      "button_clicked": "No",
-      "created_at": "Sun Sep 05 2021 23:57"
-    },
-    {
-      "id": "342c509c-3b6d-433c-a980-8b37324d278a",
+      "id": "31176ff8-1b15-42ba-8b82-40a86d4ed0af",
       "ip": "::1",
       "found": false,
       "phone_number": "",
       "select": "Yes",
-      "select_country": "KUWAIT",
-      "select_isp": "STC",
-      "number_display": "0068233399",
-      "button_clicked": "Yes",
-      "created_at": "Mon Sep 06 2021 0:9"
-    },
-    {
-      "id": "95a73317-f5ca-4219-9941-63e235ef75b9",
-      "ip": "::ffff:192.168.43.1",
-      "found": false,
-      "phone_number": "",
-      "select": "Yes",
-      "select_country": "KUWAIT",
-      "select_isp": "VIVA",
-      "number_display": "0068233399",
-      "button_clicked": "Yes",
-      "created_at": "Mon Sep 06 2021 0:13"
+      "select_country": "OMAN",
+      "select_isp": "Nawras",
+      "number_display": "00212638649440",
+      "button_clicked": "No",
+      "created_at": "Mon Sep 06 2021 16:5"
     }
   ],
   "country_video": [

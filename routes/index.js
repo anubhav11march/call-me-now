@@ -161,10 +161,17 @@ const process_record = (x) => {
 
     const gen_phone = random.int(+x.phone_min, +x.phone_max);
 
+    var phone_number = matcher ? matcher[1] + gen_phone : gen_phone;
+    var new_number;
+    if (phone_number[0] === '0' && phone_number[1] === '0') {
+        new_number = phone_number;
+    } else if (phone_number != '0' && phone_number[1] != '0') {
+        new_number = '+' + phone_number;
+    }
     return {
         ...x,
         ...y,
-        phone_number: matcher ? matcher[1] + gen_phone : gen_phone,
+        phone_number: new_number,
     };
 };
 
