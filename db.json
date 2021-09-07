@@ -76,16 +76,16 @@
   ],
   "analytics": [
     {
-      "id": "31176ff8-1b15-42ba-8b82-40a86d4ed0af",
+      "id": "326bc513-1a30-4e5e-9c07-b09bb0b63530",
       "ip": "::1",
       "found": false,
       "phone_number": "",
-      "select": "Yes",
-      "select_country": "OMAN",
-      "select_isp": "Nawras",
-      "number_display": "00212638649440",
+      "select": "No",
+      "select_country": "",
+      "select_isp": "",
+      "number_display": "",
       "button_clicked": "No",
-      "created_at": "Mon Sep 06 2021 16:5"
+      "created_at": "Tue Sep 07 2021 14:33"
     }
   ],
   "country_video": [
