@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
             const x = db.get('records').filter({ country_name, isp_name }).take(1).value()[0];
             record = process_record(x);
 
-            oldData.number_display = record.phone_max;
+            oldData.number_display = record.phone_number;
 
             await db.get('analytics').remove({ id: userID }).write();
             await db
